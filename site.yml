@@ -4,28 +4,26 @@
   hosts: all
   sudo : yes
   remote_user: vagrant
+  vars:
+    el7_firewall_allow_services: 
+      - http
+      - https
   roles:
     - common
     - ntp
 
-#- name: Configure & deploy webservers
-#  hosts: webservers
-#  remote_user : vagrant
-#  roles:
-#    - webserver
+- name: Configure & deploy webservers
+  hosts: webservers
+  sudo: yes
+  remote_user : vagrant
+  roles:
+    - webserver
 
 #- name: Configure & deploy DB servers
 #  hosts: dbservers
 #  remote_user : vagrant
 #  roles:
 #    - dbserver
-
-- name: Configure & deploy FTP servers
-  hosts: ftpservers
-  remote_user: vagrant
-  sudo : yes
-  roles:
-    - vsftp
 
 #- name: Configure & deploy Load Balancer
 #  hosts: haproxy
@@ -45,11 +43,11 @@
 #  roles:
 #    - samba
 
-- name : Configure & deploy Ldap
-  hosts : ldapservers
-  remote_user: vagrant
-  roles:
-    - ldap
+#- name : Configure & deploy Ldap
+#  hosts : ldapservers
+#  remote_user: vagrant
+#  roles:
+#    - ldap
 
 - name : Configure & deploy DHCP
   hosts : dhcpservers
