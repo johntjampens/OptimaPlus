@@ -1,5 +1,5 @@
-#[webservers]
-#webserver-lab-[1:2].labo.local
+[webservers]
+webserver-lab-[1:3].labo.local
 
 #[dbservers]
 #dbserver-lab-1.labo.local
