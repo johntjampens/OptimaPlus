@@ -1,0 +1,67 @@
+#My general playbook for the application stacks
+---
+- name: apply common configuration to all nodes
+  hosts: all
+  sudo : yes
+  remote_user: vagrant
+  roles:
+    - common
+    - ntp
+
+#- name: Configure & deploy webservers
+#  hosts: webservers
+#  remote_user : vagrant
+#  roles:
+#    - webserver
+
+#- name: Configure & deploy DB servers
+#  hosts: dbservers
+#  remote_user : vagrant
+#  roles:
+#    - dbserver
+
+- name: Configure & deploy FTP servers
+  hosts: ftpservers
+  remote_user: vagrant
+  sudo : yes
+  roles:
+    - vsftp
+
+#- name: Configure & deploy Load Balancer
+#  hosts: haproxy
+#  remote_user: vagrant
+#  roles: 
+#    - haproxy
+
+#- name : Configure & deploy Nagios
+#  hosts : monitor
+#  remote_user: vagrant
+#  roles:
+#    - monitor
+
+#- name : Configure & deploy Samba
+#  hosts : samba
+#  remote_user: vagrant
+#  roles:
+#    - samba
+
+- name : Configure & deploy Ldap
+  hosts : ldapservers
+  remote_user: vagrant
+  roles:
+    - ldap
+
+- name : Configure & deploy DHCP
+  hosts : dhcpservers
+  remote_user : vagrant
+  roles:
+    - dhcp
+
+- name : Configure & deploy DNS
+  hosts : dnsservers
+  remote_user : vagrant
+  sudo : yes
+  vars:
+    bind_zone_master_server_ip : '10.200.1.15'
+  roles:
+    - bind

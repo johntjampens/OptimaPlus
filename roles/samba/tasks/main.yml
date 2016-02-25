@@ -1,0 +1,101 @@
+# File: roles/fileserver/tasks/main.yml
+---
+
+- name: Install Samba packages
+  sudo : True
+  yum:
+    pkg: "{{ item }}"
+    state: installed
+  with_items:
+    - libsemanage-python
+    - samba-common
+    - samba
+    - samba-client
+  tags: samba
+
+- name: Make sure SELinux boolean settings are correct
+  sudo : True
+  seboolean:
+    name: "{{ item }}"
+    state: yes
+    persistent: yes
+  with_items:
+    - samba_enable_home_dirs
+    - samba_export_all_rw
+  tags: samba
+
+- name: Create share directories
+  sudo : True
+  with_items: samba_shares
+  file:
+    state: directory
+    path: "{{ samba_shares_root}}/{{ item.name }}"
+    owner: root
+    group: "{{ item.group|default('users') }}"
+    mode: "{{ item.directory_mode|default('0775') }}"
+    setype: "{{ item.setype|default('samba_share_t') }}"
+  when: samba_shares is defined
+  tags: samba
+
+- name: Check if /var/www/html exists
+  sudo : True
+  when: samba_create_varwww_symlinks is defined and samba_create_varwww_symlinks == true
+  stat: path=/var/www/html
+  register: var_www_html
+  tags: samba
+
+- name: Create link to shares in /var/www/html
+  sudo : True
+  when: var_www_html.stat.isdir is defined and var_www_html.stat.isdir == true
+  file:
+    state: link
+    path: "/var/www/html/{{ item.name }}"
+    src: "{{ samba_shares_root }}/{{ item.name }}"
+  with_items: samba_shares
+  tags: samba
+
+- name: Samba configuration
+  sudo : True
+  template:
+    dest: /etc/samba/smb.conf
+    src: smb.conf.j2
+    validate: 'testparm -s %s'
+  notify: Restart Samba
+  tags: samba
+
+- name: Start Samba service
+  sudo : True
+  service:
+    name: smb
+    state: started
+    enabled: yes
+  tags: samba
+
+- name: Start WindBind service
+  sudo : True
+  service:
+    name: nmb
+    state: started
+    enabled: yes
+  tags: samba
+
+- name: Firewall rules for Samba file share
+  sudo : True
+  firewalld:
+    service: "{{ item[0] }}"
+    permanent: "{{ item[1] }}"
+    state: enabled
+  with_nested:
+    - [ samba ]
+    - [ true, false ]
+  tags: samba
+
+- name: Create Samba users if they don't exist yet
+  sudo : True
+  shell: >
+    (pdbedit -L | grep {{ item.name }} 2>&1 > /dev/null) \
+    || (echo {{ item.password }}; echo {{ item.password }}) \
+    | smbpasswd -s -a {{ item.name }}
+  with_items: samba_users
+  when: samba_users is defined
+  tags: samba

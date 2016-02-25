@@ -1,0 +1,26 @@
+# roles/dhcp/defaults/main.yml
+---
+
+dhcp_global_default_lease_time: 28800
+dhcp_global_max_lease_time: 43200
+dhcp_global_subnet_mask: 255.255.255.0
+dhcp_global_broadcast_address: 10.200.1.255
+dhcp_global_routers: 10.200.1.254
+dhcp_global_domain_name: '"labo.local"'
+
+dhcp_subnets:
+    - ip: 10.200.1.0
+      netmask: 255.255.255.0
+      domain_name_servers:
+        - 10.200.1.15
+        - 10.200.1.16
+      range_begin: 10.200.1.100
+      range_end: 10.200.1.150
+      routers: 10.200.1.254
+      hosts:
+        - name: TEST1
+          mac: '00:11:22:33:44:55'
+          ip: 10.200.1.151
+        - name: TEST2
+          mac: '00:de:ad:be:ef:00'
+          ip: 10.200.1.152

@@ -1,0 +1,4 @@
+---
+- name: restart haproxy
+  sudo : True
+  service: name=haproxy state=restarted

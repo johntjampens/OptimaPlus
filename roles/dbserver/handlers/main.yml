@@ -1,0 +1,14 @@
+# roles/mariadb/handlers/main.yml
+---
+
+- name: restart mariadb
+  sudo : True
+  service:
+    name: mariadb
+    state: restarted
+
+- name: restart firewalld
+  sudo : True
+  service:
+    name: firewalld
+    state: restarted

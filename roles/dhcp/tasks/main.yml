@@ -1,0 +1,27 @@
+# roles/dhcp/tasks/main.yml
+---
+
+- name: Install packages
+  sudo : True
+  yum:
+    pkg: "{{ item }}"
+    state: installed
+  with_items: dhcp_packages
+  tags: dhcp
+
+- name: Install config file
+  sudo : True 
+  template:
+    src: etc_dhcp_dhcpd.conf.j2
+    dest: /etc/dhcp/dhcpd.conf
+    validate: 'dhcpd -t -cf %s'
+  notify: restart dhcp
+  tags: dhcpd
+
+- name: Ensure service is started
+  sudo : True
+  service:
+    name: "{{ dhcp_service }}"
+    state: started
+    enabled: true
+  tags: dhcp

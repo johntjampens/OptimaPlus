@@ -1,0 +1,6 @@
+# roles/dhcp/vars/main.yml
+---
+
+ldap_server_fqdn: ldap-lab-1.labo.local
+admin_password: JohTja5855
+administration_domain: labo.local
