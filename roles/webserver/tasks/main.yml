@@ -21,6 +21,13 @@
   when: httpd_scripting is defined and httpd_scripting == "php"
   tags: httpd
 
+- name: Install Git
+  yum:
+    name: "{{ item }}"
+    state : present
+  with_items:
+    - git
+
 - name: Ensure Apache is always running
   sudo : True
   service:
@@ -50,5 +57,16 @@
     group: root
     setype: httpd_config_t
     mode: '0644'
+  notify: restart httpd
+  tags: httpd
+
+- name : Clean existing website content
+  file: path=/var/www/html state=absent
+
+- name : Clone Git repository
+  git: >
+    dest=/var/www/html
+    repo=https://github.com/johntjampens/Demo_website.git
+    update=no
   notify: restart httpd
   tags: httpd

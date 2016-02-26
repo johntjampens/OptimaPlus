@@ -1,8 +1,17 @@
 # roles/mariadb/defaults/main.yml
 ---
-
-mariadb_databases: []
-mariadb_users: []
-mariadb_root_password: ''
-
-mariadb_bind_address: '127.0.0.1'
+mariadb_databases:
+  - wordpress
+  - demo
+mariadb_root_password: aaZZ1234
+mariadb_users:
+  - name: appusr
+    password: aaZZ1234
+    priv: "wordpress.*:ALL,GRANT"
+  - name: demo
+    password: aaZZ1234
+    priv: "demo.*:ALL,GRANT"
+mariadb_init_scripts:
+  - database: demo
+    script: init.sql
+mariadb_bind_address : '0.0.0.0'

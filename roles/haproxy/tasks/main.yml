@@ -13,9 +13,14 @@
     state: present
   when: ansible_os_family == 'Debian'
 
-- name: Ensure HAProxy is installed (RedHat).
-  sudo : True
-  yum: name=haproxy state=installed
+- name: Ensure HAProxy and Socat is installed (RedHat).
+  sudo : True 
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items:
+    - haproxy
+    - socat
   when: ansible_os_family == 'RedHat'
 
 - name: Get HAProxy version.
