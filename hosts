@@ -1,23 +1,20 @@
 [webservers]
 webserver-lab-[1:3].labo.local
 
-#[dbservers]
-#dbserver-lab-1.labo.local
+[dbservers]
+dbserver-lab-1.labo.local
 
-#[haproxy]
-#haproxy.labo.local
+[haproxy]
+haproxy.labo.local
 
-#[monitor]
-#nagios.labo.local
+[monitor]
+monitor.labo.local
 
-#[samba]
-#file-lab-1.labo.local
+[samba]
+file-lab-1.labo.local
 
 [dhcpservers]
 dhcp-lab-1.labo.local
-
-[ldapservers]
-ldap-lab-[1-2].labo.local
 
 [dnsservers]
 dns-lab-[1:2].labo.local

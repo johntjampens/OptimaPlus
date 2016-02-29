@@ -8,9 +8,17 @@
     el7_firewall_allow_services: 
       - http
       - https
+      - mysql
+    el7_firewall_allow_ports:
+      - 445/tcp
+      - 445/udp
+      - 137/udp
+      - 138/udp
+      - 139/tcp
   roles:
     - common
     - ntp
+    - ansible-pip
 
 - name: Configure & deploy webservers
   hosts: webservers
@@ -19,35 +27,33 @@
   roles:
     - webserver
 
-#- name: Configure & deploy DB servers
-#  hosts: dbservers
-#  remote_user : vagrant
-#  roles:
-#    - dbserver
+- name: Configure & deploy monitor server (Collectd)
+  hosts: monitor
+  sudo : yes
+  remote_user : vagrant
+  roles:
+    - monitor
 
-#- name: Configure & deploy Load Balancer
-#  hosts: haproxy
-#  remote_user: vagrant
-#  roles: 
-#    - haproxy
+- name: Configure & deploy DB servers
+  hosts: dbservers
+  sudo: yes
+  remote_user : vagrant
+  roles:
+    - dbserver
 
-#- name : Configure & deploy Nagios
-#  hosts : monitor
-#  remote_user: vagrant
-#  roles:
-#    - monitor
+- name: Configure & deploy Load Balancer
+  hosts: haproxy
+  sudo: yes
+  remote_user: vagrant
+  roles: 
+    - haproxy
 
-#- name : Configure & deploy Samba
-#  hosts : samba
-#  remote_user: vagrant
-#  roles:
-#    - samba
-
-#- name : Configure & deploy Ldap
-#  hosts : ldapservers
-#  remote_user: vagrant
-#  roles:
-#    - ldap
+- name : Configure & deploy Samba
+  sudo : yes
+  hosts : samba
+  remote_user: vagrant
+  roles:
+    - samba
 
 - name : Configure & deploy DHCP
   hosts : dhcpservers

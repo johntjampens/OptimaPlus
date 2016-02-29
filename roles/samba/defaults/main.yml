@@ -1,7 +1,7 @@
 # roles/samba/defaults/main.yml
 ---
 
-samba_workgroup: 'OPTIMAPLUS'
+samba_workgroup: 'LABO'
 samba_server_string: 'NAS %m'
 samba_log_size: 5000
 samba_security: 'user'
@@ -10,3 +10,16 @@ samba_map_to_guest: 'bad user'
 samba_load_printers: 'no'
 samba_load_homes: 'no'
 samba_shares_root: '/srv/shares'
+samba_users:
+  - name : vagrant
+    password : vagrant
+samba_shares:
+  - name : public
+    comment : 'Public Share, writable for everyone'
+    public : yes
+    writelist : +users
+    group : users
+  - name : private
+    comment : 'Private Share, only for members of network'
+    writelist : vagrant
+    group : users
