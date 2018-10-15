@@ -1,5 +1,6 @@
 # OptimaPlus
 
+Will be updated with new contexts soon because school project is over.
 This  project is a test labo for my school about building servers automatically with vagrant and Ansible.
 
 The name of this project is chosen with OSS in mind.
